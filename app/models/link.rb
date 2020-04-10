@@ -15,14 +15,14 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-require 'link_id'
+require "link_id"
 
 class Link < ApplicationRecord
   validates :url, presence: true
   validates :url, uniqueness: true
   validate :url_exists
 
-  scope :top_hits, -> { order(hits_count: :desc) }
+  scope :top_hits, -> { order(hits_count: :desc).limit(100) }
 
   before_create :assign_slug
 
@@ -51,6 +51,6 @@ class Link < ApplicationRecord
   def url_exists
     fetch_data
   rescue StandardError
-    errors.add(:url, 'is not working')
+    errors.add(:url, "is not working")
   end
 end
