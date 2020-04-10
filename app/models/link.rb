@@ -15,7 +15,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-require "link_id"
+require 'link_id'
 
 class Link < ApplicationRecord
   validates :url, presence: true
@@ -51,6 +51,6 @@ class Link < ApplicationRecord
   def url_exists
     fetch_data
   rescue StandardError
-    errors.add(:url, "is not working")
+    errors.add(:url, 'is not working')
   end
 end
