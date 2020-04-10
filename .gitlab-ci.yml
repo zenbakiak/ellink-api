@@ -43,7 +43,7 @@ before_script:
   - bundle exec rails db:schema:load RAILS_ENV=test
 
 stages:
-  - test
+  # - test
   - deploy
 
 Tests:
