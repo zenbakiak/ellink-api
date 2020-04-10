@@ -20,7 +20,7 @@ require "link_id"
 class Link < ApplicationRecord
   validates :url, presence: true
 
-  scope :top_hits, -> { order(hist_count: :desc) }
+  scope :top_hits, -> { order(hits_count: :desc) }
 
   before_create :assign_slug
 
