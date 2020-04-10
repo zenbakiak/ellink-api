@@ -4,44 +4,50 @@ module Api
   module V1
     class LinksController < BaseController
       def index
-        movements = Link.top_hits
-        render json: LinkSerializer.new(movements).serialized_json
+        links = Link.top_hits
+        render_with(links, LinkSerializer)
       end
 
       def show
-        @movement = Link.find_by(movementname: params[:id])
-        if @movement
-          render json: LinkSerializer.new(@movement).serialized_json
+        link = Link.find_by(slug: params[:id])
+        if link
+          link.increment!(:hits_count)
+          render_with(link, LinkSerializer)
         else
           render_not_found
         end
       end
 
       def create
-        @movement = Link.new(movement_params)
-        @movement.sender_id = User.current.id
-        if @movement.save
-          render json: LinkSerializer.new(@movement).serialized_json
+        @link = Link.new(link_params)
+        if @link.save
+          render_with(@link, LinkSerializer)
         else
-          render json: {
-            status: 500,
-            errors: @movement.errors.full_messages,
-          }
+          render_save_error(@link)
+        end
+      end
+
+      def prefetch
+        @link = Link.new(link_params)
+        if @link.valid?
+          render_with(@link, LinkSerializer)
+        else
+          render_save_error(@link)
         end
       end
 
       private
 
-      def movement_params
+      def link_params
         params
-          .require(:movement)
+          .require(:link)
           .permit(
-            :id,
-            :receiver_id,
-            :amount,
-            :ref,
-            :concept,
-            :created_at
+            :url,
+            :title,
+            :description,
+            :author,
+            :image,
+            :slug
           )
       end
     end

@@ -17,6 +17,6 @@
 #
 FactoryBot.define do
   factory :link do
-    url { FFaker::Internet.http_url }
+    url { 'https://www.google.com.mx' }
   end
 end

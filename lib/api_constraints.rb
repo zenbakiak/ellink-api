@@ -15,6 +15,6 @@ class ApiConstraints
   end
 
   def accept_header?
-    req.headers["Accept"].include?(accept_header)
+    req.headers['Accept'].include?(accept_header)
   end
 end
