@@ -2,20 +2,27 @@
 
 # == Schema Information
 #
-# Table name: movements
+# Table name: links
 #
 #  id          :bigint           not null, primary key
+#  url         :text             not null
+#  title       :string
+#  description :text
+#  author      :string
+#  image       :string
+#  hits_count  :integer          default(0)
+#  slug        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 class LinkSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :id,
-             :url,
-             :author,
+  attributes :author,
+             :created_at,
              :description,
-             :title,
+             :hits_count,
              :image,
-             :hits_count
-  :created_at
+             :slug,
+             :title,
+             :url
 end
