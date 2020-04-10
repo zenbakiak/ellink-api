@@ -10,3 +10,5 @@ Metrics/BlockLength:
   Enabled: false
 Rails/InverseOf:
   Enabled: false
+Rails/SkipsModelValidations:
+  Enabled: false
