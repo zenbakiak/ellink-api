@@ -15,11 +15,11 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Link, type: :model do
   subject { FactoryBot.create(:link) }
-  describe "associations" do
+  describe 'associations' do
     it { should respond_to(:url) }
     it { should respond_to(:title) }
     it { should respond_to(:description) }
@@ -29,15 +29,38 @@ RSpec.describe Link, type: :model do
     it { should respond_to(:slug) }
   end
 
-  describe "validations" do
+  describe 'validations' do
     it { should validate_presence_of(:url) }
+    it { should validate_uniqueness_of(:url) }
+
+    it 'validates if link is not working' do
+      link = FactoryBot.build(:link, url: 'https://thislinkdoesnotexist.io')
+      link.valid?
+      expect(link).to be_invalid
+      expect(link.errors[:url]).to include('is not working')
+    end
+
+    it 'validates duplicated links' do
+      FactoryBot.create(:link, url: 'https://www.google.com')
+      link2 = FactoryBot.build(:link, url: 'https://www.google.com')
+      link2.valid?
+      expect(link2).to be_invalid
+      expect(link2.errors[:url]).to include('has already been taken')
+    end
   end
 
-  describe "#save" do
-    it "creates a link with provided link" do
+  describe '#save' do
+    it 'creates a link with provided link' do
       link = FactoryBot.create(:link)
       expect(Link.count).to eq(1)
       Link.first.slug == link.slug
+    end
+  end
+
+  describe '.fetch_data' do
+    it 'extract page information' do
+      link = FactoryBot.create(:link, url: 'https://github.com/')
+      expect(link.author).to eq('github')
     end
   end
 end
